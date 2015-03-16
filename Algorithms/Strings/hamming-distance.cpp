@@ -17,7 +17,7 @@ int main()
             std::cin >> l >> r >> c;
 
             auto f = std::begin(s);
-            std::fill(std::next(f, --l), std::next(f, r), c);
+            std::fill(f + l - 1, f + r, c);
         }},
         {'S', [](std::string & s)
         {
@@ -35,7 +35,7 @@ int main()
             std::cin >> l >> r;
 
             auto f = std::begin(s);
-            std::reverse(std::next(f, --l), std::next(f, r));
+            std::reverse(f + l - 1, f + r);
         }},
         {'W', [](std::string & s)
         {
@@ -43,7 +43,7 @@ int main()
             std::cin >> l >> r;
 
             auto f = std::begin(s);
-            std::copy(std::next(f, --l), std::next(f, r), std::ostream_iterator<char>(std::cout, ""));
+            std::copy(f + l - 1, f + r, std::ostream_iterator<char>(std::cout, ""));
             std::cout << "\n";
         }},
         {'H', [](std::string & s)
@@ -51,16 +51,17 @@ int main()
             std::size_t l1, l2, len;
             std::cin >> l1 >> l2 >> len;
 
-            auto f = std::begin(s);
-            auto b1 = std::next(f, --l1), e1 = std::next(f, l1 + len),
-                 b2 = std::next(f, --l2);
+            if (l1 > l2)
+                std::swap(l1, l2);
 
             std::size_t result = 0;
+
+            auto f = std::begin(s);
+            auto b1 = f + l1 - 1, e1 = f + l1 + len - 1,
+                 b2 = f + l2 - 1;
+
             for (; b1 != e1; ++b1, ++b2)
-            {
-                if (*b1 != *b2)
-                    ++result;
-            }
+                result += (*b1 != *b2);
 
             std::cout << result << "\n";
         }}
